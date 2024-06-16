@@ -17,7 +17,7 @@ namespace PriceFlex_Backend.Services
             var content = doc.QuerySelector(classes).InnerText;
             
 
-            return content;
+            return content ?? "EMPTY";
 
         }
 

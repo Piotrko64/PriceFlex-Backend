@@ -10,23 +10,24 @@ namespace PriceFlex_Backend.Controllers
     public class BasicController : ControllerBase
     {
         private readonly WebScrapperService _webscrapper;
+        private readonly EmailSenderService _emailSenderService;
         private readonly ILogger<BasicController> _logger;
 
-        public BasicController(WebScrapperService webScrapper, ILogger<BasicController> logger)
+        public BasicController(WebScrapperService webScrapper, ILogger<BasicController> logger,  EmailSenderService emailSenderService)
         {
             _webscrapper = webScrapper;
             _logger = logger;
+            _emailSenderService = emailSenderService;
         }
 
         // GET: api/<ValuesController>
         [HttpGet]
-        public string Get()
+        public async Task<OkResult> Get()
         {
             Console.WriteLine(_logger);
-            _logger.LogError("ERROR123");
-            _logger.LogInformation("TEST");
-
-            return _webscrapper.GetPriceByUrlAndClasses("https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050", ".main-price .whole");
+           await  _emailSenderService.SendEmailAsync("Piotrko64@gmail.com", "TEMAT", "<h1>AAAA</h1>");
+          
+            return Ok();
         }
 
     }

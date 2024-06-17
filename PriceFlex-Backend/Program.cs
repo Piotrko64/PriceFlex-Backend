@@ -13,6 +13,7 @@ builder.Host.UseNLog();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<WebScrapperService>();
+builder.Services.AddScoped<EmailSenderService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScheduler();

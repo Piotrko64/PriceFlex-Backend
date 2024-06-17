@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PriceFlex_Backend.Data;
 using PriceFlex_Backend.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,13 +12,15 @@ namespace PriceFlex_Backend.Controllers
     {
         private readonly WebScrapperService _webscrapper;
         private readonly EmailSenderService _emailSenderService;
+        private readonly ScrapperDbContext _scrapperDbContext;
         private readonly ILogger<BasicController> _logger;
 
-        public BasicController(WebScrapperService webScrapper, ILogger<BasicController> logger,  EmailSenderService emailSenderService)
+        public BasicController(WebScrapperService webScrapper, ILogger<BasicController> logger,  EmailSenderService emailSenderService, ScrapperDbContext scrapperDbContext)
         {
             _webscrapper = webScrapper;
             _logger = logger;
             _emailSenderService = emailSenderService;
+            _scrapperDbContext = scrapperDbContext;
         }
 
         // GET: api/<ValuesController>
@@ -26,7 +29,12 @@ namespace PriceFlex_Backend.Controllers
         {
             Console.WriteLine(_logger);
 
-           await  _emailSenderService.SendEmailAsync("Piotrko64@gmail.com", "TEMAT", "<h1>AAAA</h1>");
+            var a = _scrapperDbContext.Users.First().Id;
+
+
+            Console.WriteLine(a);
+
+            await _emailSenderService.SendEmailAsync("Piotrko64@gmail.com", "TEMAT", "<h1>AAAA</h1>");
           
             return Ok();
         }

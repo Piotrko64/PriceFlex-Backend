@@ -12,13 +12,12 @@ namespace PriceFlex_Backend.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<OnlineShopScrapper> OnlineShopScrappers { get; set; }
+        public DbSet<ScrapperPrice> ScrapperPrices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-               .Property(r => r.Email)
-               .IsRequired()
-               .HasMaxLength(50);
+       
         }
 
 

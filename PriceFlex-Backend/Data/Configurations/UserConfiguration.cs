@@ -12,9 +12,6 @@ namespace PriceFlex_Backend.Data.Configurations
             builder.Property(u => u.Email)
                    .IsRequired()
                    .HasMaxLength(255);
-            builder.Property(u => u.Role)
-                   .IsRequired()
-                   .HasConversion<string>(); 
             builder.Property(u => u.CreatedAt)
                    .IsRequired();
             builder.Property(u => u.UpdatedAt)

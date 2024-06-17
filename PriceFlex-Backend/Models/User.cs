@@ -8,11 +8,11 @@ namespace PriceFlex_Backend.Models
 
         public string Email { get; set; }
 
-        public UserRole Role { get; set; }
+        //public UserRole Role { get; set; }
 
        
-        public List<OnlineShopScrapper> OnlineShopScrappers { get; set; }
-        public List<ScrapperPrice> ScrapperPrice { get; set; }
+        //public List<OnlineShopScrapper> OnlineShopScrappers { get; set; }
+        //public List<ScrapperPrice> ScrapperPrice { get; set; }
 
     }
 

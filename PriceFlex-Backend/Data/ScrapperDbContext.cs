@@ -15,8 +15,10 @@ namespace PriceFlex_Backend.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.Entity<User>()
+               .Property(r => r.Email)
+               .IsRequired()
+               .HasMaxLength(50);
         }
 
 

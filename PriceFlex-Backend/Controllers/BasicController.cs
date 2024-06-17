@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PriceFlex_Backend.Data;
+using PriceFlex_Backend.Models;
 using PriceFlex_Backend.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,9 +30,16 @@ namespace PriceFlex_Backend.Controllers
         {
             Console.WriteLine(_logger);
 
-            var a = _scrapperDbContext.Users.First().Id;
+            var a = _scrapperDbContext.ScrapperPrices.Add(new ScrapperPrice()
+            {
+                Price = 10.4,
+                OnlineShopScrapperId = 55,
 
+                Url = "aaaa"
 
+            });
+
+            _scrapperDbContext.SaveChanges();
             Console.WriteLine(a);
 
             await _emailSenderService.SendEmailAsync("Piotrko64@gmail.com", "TEMAT", "<h1>AAAA</h1>");

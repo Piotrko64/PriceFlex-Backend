@@ -17,7 +17,9 @@ namespace PriceFlex_Backend.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-       
+
+
+            new DbSeeder(modelBuilder).Seed();
         }
 
 

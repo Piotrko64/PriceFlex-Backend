@@ -5,7 +5,12 @@ namespace PriceFlex_Backend.Models
     public class ScrapperPrice : BasicModel
     {
         [Required]
-        public float Price { get; set; }
-        public string OnlineShopScrapperId { get; set; }
+        public  double Price { get; set; }
+
+        [Required]
+        public  int OnlineShopScrapperId { get; set; }
+
+ 
+        public string Url { get; set; }
     }
 }

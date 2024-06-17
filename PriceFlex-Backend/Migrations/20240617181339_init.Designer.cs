@@ -12,8 +12,8 @@ using PriceFlex_Backend.Data;
 namespace PriceFlex_Backend.Migrations
 {
     [DbContext(typeof(ScrapperDbContext))]
-    [Migration("20240617174013_initial")]
-    partial class initial
+    [Migration("20240617181339_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,11 @@ namespace PriceFlex_Backend.Migrations
 
             modelBuilder.Entity("PriceFlex_Backend.Models.OnlineShopScrapper", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Classes")
                         .IsRequired()
@@ -48,27 +51,49 @@ namespace PriceFlex_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("OnlineShopScrappers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 55,
+                            Classes = ".main-price .whole",
+                            CreatedAt = new DateTime(2024, 6, 17, 18, 13, 38, 770, DateTimeKind.Utc).AddTicks(276),
+                            Name = "Media Expert",
+                            UpdatedAt = new DateTime(2024, 6, 17, 18, 13, 38, 770, DateTimeKind.Utc).AddTicks(279),
+                            Url = "https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050-windows-11-home"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Classes = ".main-price .whole",
+                            CreatedAt = new DateTime(2024, 6, 17, 18, 13, 38, 770, DateTimeKind.Utc).AddTicks(282),
+                            Name = "Vinted",
+                            UpdatedAt = new DateTime(2024, 6, 17, 18, 13, 38, 770, DateTimeKind.Utc).AddTicks(282),
+                            Url = "https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050-windows-11-home"
+                        });
                 });
 
             modelBuilder.Entity("PriceFlex_Backend.Models.ScrapperPrice", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("OnlineShopScrapperId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("OnlineShopScrapperId")
+                        .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("float");
@@ -76,8 +101,12 @@ namespace PriceFlex_Backend.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -90,8 +119,11 @@ namespace PriceFlex_Backend.Migrations
 
             modelBuilder.Entity("PriceFlex_Backend.Models.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -128,7 +160,7 @@ namespace PriceFlex_Backend.Migrations
                         .IsRequired();
 
                     b.HasOne("PriceFlex_Backend.Models.User", null)
-                        .WithMany("ScrapperPrice")
+                        .WithMany("ScrapperPrices")
                         .HasForeignKey("UserId");
                 });
 
@@ -141,7 +173,7 @@ namespace PriceFlex_Backend.Migrations
                 {
                     b.Navigation("OnlineShopScrappers");
 
-                    b.Navigation("ScrapperPrice");
+                    b.Navigation("ScrapperPrices");
                 });
 #pragma warning restore 612, 618
         }

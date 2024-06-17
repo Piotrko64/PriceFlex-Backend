@@ -25,6 +25,7 @@ namespace PriceFlex_Backend.Controllers
         public async Task<OkResult> Get()
         {
             Console.WriteLine(_logger);
+
            await  _emailSenderService.SendEmailAsync("Piotrko64@gmail.com", "TEMAT", "<h1>AAAA</h1>");
           
             return Ok();

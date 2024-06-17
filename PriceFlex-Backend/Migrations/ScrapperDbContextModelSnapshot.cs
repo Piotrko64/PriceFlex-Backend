@@ -62,18 +62,18 @@ namespace PriceFlex_Backend.Migrations
                         {
                             Id = 55,
                             Classes = ".main-price .whole",
-                            CreatedAt = new DateTime(2024, 6, 17, 18, 13, 38, 770, DateTimeKind.Utc).AddTicks(276),
+                            CreatedAt = new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6382),
                             Name = "Media Expert",
-                            UpdatedAt = new DateTime(2024, 6, 17, 18, 13, 38, 770, DateTimeKind.Utc).AddTicks(279),
+                            UpdatedAt = new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6385),
                             Url = "https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050-windows-11-home"
                         },
                         new
                         {
                             Id = 8,
                             Classes = ".main-price .whole",
-                            CreatedAt = new DateTime(2024, 6, 17, 18, 13, 38, 770, DateTimeKind.Utc).AddTicks(282),
+                            CreatedAt = new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6388),
                             Name = "Vinted",
-                            UpdatedAt = new DateTime(2024, 6, 17, 18, 13, 38, 770, DateTimeKind.Utc).AddTicks(282),
+                            UpdatedAt = new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6388),
                             Url = "https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050-windows-11-home"
                         });
                 });
@@ -92,8 +92,8 @@ namespace PriceFlex_Backend.Migrations
                     b.Property<int>("OnlineShopScrapperId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("float");
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -122,6 +122,9 @@ namespace PriceFlex_Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AllowedScrappers")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -130,8 +133,9 @@ namespace PriceFlex_Backend.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");

@@ -39,6 +39,15 @@ namespace PriceFlex_Backend.Controllers
 
             });
 
+
+            var ab= _scrapperDbContext.Users.Add(new User()
+            {
+                Role = UserRole.Admin,
+                Email = "",
+
+
+            });
+
             _scrapperDbContext.SaveChanges();
             Console.WriteLine(a);
 

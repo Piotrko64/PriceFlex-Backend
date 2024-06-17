@@ -3,6 +3,7 @@ using NLog.Web;
 using PriceFlex_Backend.Services;
 using PriceFlex_Backend.Data;
 using Microsoft.EntityFrameworkCore;
+using PriceFlex_Backend.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +21,13 @@ builder.Services.AddScoped<EmailSenderService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScheduler();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 
 
 var app = builder.Build();
+
+
 
 
 
@@ -46,7 +50,7 @@ app.Services.UseScheduler(scheduler =>
     }).EveryFiveSeconds();
 
 });
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

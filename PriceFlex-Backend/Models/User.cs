@@ -10,6 +10,8 @@ namespace PriceFlex_Backend.Models
 
         public UserRole Role { get; set; }
 
+        public int AllowedScrappers { get; set; }
+
        
        virtual public List<OnlineShopScrapper> OnlineShopScrappers { get; set; }
        virtual public List<ScrapperPrice> ScrapperPrices { get; set; }

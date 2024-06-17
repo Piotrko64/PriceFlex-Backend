@@ -20,6 +20,13 @@ namespace PriceFlex_Backend.Data
 
 
             new DbSeeder(modelBuilder).Seed();
+
+
+            modelBuilder
+       .Entity<User>()
+       .Property(e => e.Role)
+       .HasConversion<string>();
+
         }
 
 

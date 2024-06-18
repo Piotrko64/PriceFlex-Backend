@@ -26,6 +26,7 @@ namespace PriceFlex_Backend.Controllers
 
         // GET: api/<ValuesController>
         [HttpGet]
+        [ResponseCache(Duration = 1000)]
         public async Task<OkResult> Get()
         {
             Console.WriteLine(_logger);

@@ -24,7 +24,6 @@ namespace PriceFlex_Backend.Controllers
             _scrapperDbContext = scrapperDbContext;
         }
 
-        // GET: api/<ValuesController>
         [HttpGet]
         [ResponseCache(Duration = 1000)]
         public async Task<OkResult> Get()

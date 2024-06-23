@@ -1,4 +1,5 @@
-﻿using PriceFlex_Backend.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using PriceFlex_Backend.Data;
 using PriceFlex_Backend.Models;
 using PriceFlex_Backend.Models.dtos.user;
 
@@ -12,11 +13,13 @@ namespace PriceFlex_Backend.Services
     public class AccountService : IAccountService
     {
 
-        public readonly ScrapperDbContext _context;
+        private readonly ScrapperDbContext _context;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public AccountService(ScrapperDbContext context)
+        public AccountService(ScrapperDbContext context, IPasswordHasher<User> passwordHasher)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         public void RegisterUser(RegisterUserDto registerUserDto)
@@ -25,9 +28,12 @@ namespace PriceFlex_Backend.Services
             var newUser = new User()
             {
                 Email = registerUserDto.Email,
-                Password = registerUserDto.Password,
+                
                 Role = registerUserDto.Role,
             };
+
+
+            newUser.Password = _passwordHasher.HashPassword(newUser, registerUserDto.Password);
 
             _context.Users.Add(newUser);
             _context.SaveChanges();

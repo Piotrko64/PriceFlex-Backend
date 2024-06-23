@@ -4,6 +4,9 @@ using PriceFlex_Backend.Services;
 using PriceFlex_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using PriceFlex_Backend.Middlewares;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using PriceFlex_Backend.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,12 +23,19 @@ builder.Services.AddScoped<ScrapperDbContext, ScrapperDbContext>();
 builder.Services.AddScoped<EmailSenderService>();
 
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScheduler();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
+
+builder.Services.AddControllers()
+          .AddJsonOptions(options =>
+          {
+              options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+          });
 
 
 var app = builder.Build();

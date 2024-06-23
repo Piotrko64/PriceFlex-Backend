@@ -12,8 +12,9 @@ namespace PriceFlex_Backend.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<OnlineShopScrapper> OnlineShopScrappers { get; set; }
-        public DbSet<ScrapperPrice> ScrapperPrices { get; set; }
+        public DbSet<OnlineShop> OnlineShopScrappers { get; set; }
+        public DbSet<ScrapperData> ScrapperDatas { get; set; }
+        public DbSet<ScrapperConfig> ScrapperConfigs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

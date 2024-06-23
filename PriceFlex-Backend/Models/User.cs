@@ -8,13 +8,19 @@ namespace PriceFlex_Backend.Models
         [MaxLength(500)]
         public string Email { get; set; }
 
+
+        [Required]
+        public string Password { get; set; }
+
         public UserRole Role { get; set; }
 
         public int AllowedScrappers { get; set; }
 
-       
-       virtual public List<OnlineShopScrapper> OnlineShopScrappers { get; set; }
-       virtual public List<ScrapperPrice> ScrapperPrices { get; set; }
+
+        virtual public List<OnlineShop> OnlineShops { get; set; }
+        virtual public List<ScrapperConfig> ScrapperConfigs { get; set; }
+
+        virtual public List<ScrapperData> ScrapperDatas { get; set; }
 
     }
 

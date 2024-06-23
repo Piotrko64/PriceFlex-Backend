@@ -22,7 +22,43 @@ namespace PriceFlex_Backend.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("PriceFlex_Backend.Models.OnlineShopScrapper", b =>
+            modelBuilder.Entity("PriceFlex_Backend.Models.OnlineShop", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BasicUrl")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LogoImageUrl")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("OnlineShopScrappers");
+                });
+
+            modelBuilder.Entity("PriceFlex_Backend.Models.ScrapperConfig", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,6 +77,9 @@ namespace PriceFlex_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("OnlineShopId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -48,37 +87,19 @@ namespace PriceFlex_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OnlineShopId");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("OnlineShopScrappers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 55,
-                            Classes = ".main-price .whole",
-                            CreatedAt = new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6382),
-                            Name = "Media Expert",
-                            UpdatedAt = new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6385),
-                            Url = "https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050-windows-11-home"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Classes = ".main-price .whole",
-                            CreatedAt = new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6388),
-                            Name = "Vinted",
-                            UpdatedAt = new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6388),
-                            Url = "https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050-windows-11-home"
-                        });
+                    b.ToTable("ScrapperConfigs");
                 });
 
-            modelBuilder.Entity("PriceFlex_Backend.Models.ScrapperPrice", b =>
+            modelBuilder.Entity("PriceFlex_Backend.Models.ScrapperData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,29 +110,33 @@ namespace PriceFlex_Backend.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("OnlineShopScrapperId")
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("OnlineShopId")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
+                    b.Property<int>("ScrapperConfigId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OnlineShopScrapperId");
+                    b.HasIndex("OnlineShopId");
+
+                    b.HasIndex("ScrapperConfigId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ScrapperPrices");
+                    b.ToTable("ScrapperDatas");
                 });
 
             modelBuilder.Entity("PriceFlex_Backend.Models.User", b =>
@@ -133,6 +158,10 @@ namespace PriceFlex_Backend.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -145,36 +174,66 @@ namespace PriceFlex_Backend.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PriceFlex_Backend.Models.OnlineShopScrapper", b =>
+            modelBuilder.Entity("PriceFlex_Backend.Models.OnlineShop", b =>
                 {
                     b.HasOne("PriceFlex_Backend.Models.User", null)
-                        .WithMany("OnlineShopScrappers")
+                        .WithMany("OnlineShops")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("PriceFlex_Backend.Models.ScrapperPrice", b =>
+            modelBuilder.Entity("PriceFlex_Backend.Models.ScrapperConfig", b =>
                 {
-                    b.HasOne("PriceFlex_Backend.Models.OnlineShopScrapper", null)
-                        .WithMany("Prices")
-                        .HasForeignKey("OnlineShopScrapperId")
+                    b.HasOne("PriceFlex_Backend.Models.OnlineShop", null)
+                        .WithMany("ScrapperConfigs")
+                        .HasForeignKey("OnlineShopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PriceFlex_Backend.Models.User", null)
-                        .WithMany("ScrapperPrices")
-                        .HasForeignKey("UserId");
+                        .WithMany("ScrapperConfigs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("PriceFlex_Backend.Models.OnlineShopScrapper", b =>
+            modelBuilder.Entity("PriceFlex_Backend.Models.ScrapperData", b =>
                 {
-                    b.Navigation("Prices");
+                    b.HasOne("PriceFlex_Backend.Models.OnlineShop", null)
+                        .WithMany("ScrapperDatas")
+                        .HasForeignKey("OnlineShopId");
+
+                    b.HasOne("PriceFlex_Backend.Models.ScrapperConfig", "ScrapperConfig")
+                        .WithMany("ScrapperDatas")
+                        .HasForeignKey("ScrapperConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PriceFlex_Backend.Models.User", null)
+                        .WithMany("ScrapperDatas")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ScrapperConfig");
+                });
+
+            modelBuilder.Entity("PriceFlex_Backend.Models.OnlineShop", b =>
+                {
+                    b.Navigation("ScrapperConfigs");
+
+                    b.Navigation("ScrapperDatas");
+                });
+
+            modelBuilder.Entity("PriceFlex_Backend.Models.ScrapperConfig", b =>
+                {
+                    b.Navigation("ScrapperDatas");
                 });
 
             modelBuilder.Entity("PriceFlex_Backend.Models.User", b =>
                 {
-                    b.Navigation("OnlineShopScrappers");
+                    b.Navigation("OnlineShops");
 
-                    b.Navigation("ScrapperPrices");
+                    b.Navigation("ScrapperConfigs");
+
+                    b.Navigation("ScrapperDatas");
                 });
 #pragma warning restore 612, 618
         }

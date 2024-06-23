@@ -30,14 +30,7 @@ namespace PriceFlex_Backend.Controllers
         {
             Console.WriteLine(_logger);
 
-            var a = _scrapperDbContext.ScrapperPrices.Add(new ScrapperPrice()
-            {
-                Price = 10.4,
-                OnlineShopScrapperId = 55,
-
-                Url = "aaaa"
-
-            });
+          
 
 
             var ab= _scrapperDbContext.Users.Add(new User()
@@ -49,7 +42,7 @@ namespace PriceFlex_Backend.Controllers
             });
 
             _scrapperDbContext.SaveChanges();
-            Console.WriteLine(a);
+  
 
             await _emailSenderService.SendEmailAsync("Piotrko64@gmail.com", "TEMAT", "<h1>AAAA</h1>");
           

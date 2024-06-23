@@ -4,12 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace PriceFlex_Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class bettertables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +22,8 @@ namespace PriceFlex_Backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Email = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Role = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -45,9 +45,9 @@ namespace PriceFlex_Backend.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Classes = table.Column<string>(type: "longtext", nullable: false)
+                    LogoImageUrl = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Url = table.Column<string>(type: "longtext", nullable: false)
+                    BasicUrl = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -65,44 +65,75 @@ namespace PriceFlex_Backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ScrapperPrices",
+                name: "ScrapperConfigs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Classes = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Url = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OnlineShopId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScrapperConfigs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScrapperConfigs_OnlineShopScrappers_OnlineShopId",
+                        column: x => x.OnlineShopId,
+                        principalTable: "OnlineShopScrappers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ScrapperConfigs_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ScrapperDatas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Price = table.Column<double>(type: "double", nullable: false),
-                    OnlineShopScrapperId = table.Column<int>(type: "int", nullable: false),
-                    Url = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Data = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ScrapperConfigId = table.Column<int>(type: "int", nullable: false),
+                    OnlineShopId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScrapperPrices", x => x.Id);
+                    table.PrimaryKey("PK_ScrapperDatas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ScrapperPrices_OnlineShopScrappers_OnlineShopScrapperId",
-                        column: x => x.OnlineShopScrapperId,
+                        name: "FK_ScrapperDatas_OnlineShopScrappers_OnlineShopId",
+                        column: x => x.OnlineShopId,
                         principalTable: "OnlineShopScrappers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ScrapperDatas_ScrapperConfigs_ScrapperConfigId",
+                        column: x => x.ScrapperConfigId,
+                        principalTable: "ScrapperConfigs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ScrapperPrices_Users_UserId",
+                        name: "FK_ScrapperDatas_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.InsertData(
-                table: "OnlineShopScrappers",
-                columns: new[] { "Id", "Classes", "CreatedAt", "Name", "UpdatedAt", "Url", "UserId" },
-                values: new object[,]
-                {
-                    { 8, ".main-price .whole", new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6388), "Vinted", new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6388), "https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050-windows-11-home", null },
-                    { 55, ".main-price .whole", new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6382), "Media Expert", new DateTime(2024, 6, 17, 18, 28, 39, 990, DateTimeKind.Utc).AddTicks(6385), "https://www.mediaexpert.pl/komputery-i-tablety/laptopy-i-ultrabooki/laptopy/laptop-lenovo-ideapad-gaming-3-15ach6-15-6-ips-144hz-r5-5500h-16gb-ram-512gb-ssd-geforce-rtx2050-windows-11-home", null }
-                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_OnlineShopScrappers_UserId",
@@ -110,13 +141,28 @@ namespace PriceFlex_Backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScrapperPrices_OnlineShopScrapperId",
-                table: "ScrapperPrices",
-                column: "OnlineShopScrapperId");
+                name: "IX_ScrapperConfigs_OnlineShopId",
+                table: "ScrapperConfigs",
+                column: "OnlineShopId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScrapperPrices_UserId",
-                table: "ScrapperPrices",
+                name: "IX_ScrapperConfigs_UserId",
+                table: "ScrapperConfigs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScrapperDatas_OnlineShopId",
+                table: "ScrapperDatas",
+                column: "OnlineShopId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScrapperDatas_ScrapperConfigId",
+                table: "ScrapperDatas",
+                column: "ScrapperConfigId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScrapperDatas_UserId",
+                table: "ScrapperDatas",
                 column: "UserId");
         }
 
@@ -124,7 +170,10 @@ namespace PriceFlex_Backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ScrapperPrices");
+                name: "ScrapperDatas");
+
+            migrationBuilder.DropTable(
+                name: "ScrapperConfigs");
 
             migrationBuilder.DropTable(
                 name: "OnlineShopScrappers");

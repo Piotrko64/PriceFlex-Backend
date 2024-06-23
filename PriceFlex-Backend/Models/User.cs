@@ -14,7 +14,7 @@ namespace PriceFlex_Backend.Models
 
         public UserRole Role { get; set; }
 
-        public int AllowedScrappers { get; set; }
+        public int? AllowedScrappers { get; set; }
 
 
         virtual public List<OnlineShop> OnlineShops { get; set; }

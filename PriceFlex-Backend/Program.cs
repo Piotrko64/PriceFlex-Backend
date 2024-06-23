@@ -18,6 +18,9 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<WebScrapperService>();
 builder.Services.AddScoped<ScrapperDbContext, ScrapperDbContext>();
 builder.Services.AddScoped<EmailSenderService>();
+
+builder.Services.AddScoped<IAccountService, AccountService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScheduler();

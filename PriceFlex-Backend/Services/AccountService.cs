@@ -28,7 +28,6 @@ namespace PriceFlex_Backend.Services
             var newUser = new User()
             {
                 Email = registerUserDto.Email,
-                
                 Role = registerUserDto.Role,
             };
 

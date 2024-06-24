@@ -7,6 +7,11 @@ using PriceFlex_Backend.Middlewares;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using PriceFlex_Backend.Models;
+using FluentValidation;
+using PriceFlex_Backend.Models.dtos.user;
+using PriceFlex_Backend.Models.validators.user;
+using FluentValidation.AspNetCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +23,15 @@ builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 builder.Host.UseNLog();
 builder.Services.AddDbContext<ScrapperDbContext>();
 builder.Services.AddControllers();
+builder.Services
+.AddControllers()
+.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<User>());
+
 builder.Services.AddScoped<WebScrapperService>();
 builder.Services.AddScoped<ScrapperDbContext, ScrapperDbContext>();
 builder.Services.AddScoped<EmailSenderService>();
+
+
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

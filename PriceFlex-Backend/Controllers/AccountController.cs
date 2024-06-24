@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PriceFlex_Backend.Models;
 using PriceFlex_Backend.Models.dtos.user;
 using PriceFlex_Backend.Services;
 
@@ -30,10 +31,11 @@ namespace PriceFlex_Backend.Controllers
 
 
         [HttpPost("login")]
+      
         public ActionResult LoginUser([FromBody] LoginUserDto registerUserDto)
         {
 
-            Console.WriteLine(99);
+
 
             var token = _accountService.GenerateJwt(registerUserDto);
 
@@ -41,7 +43,7 @@ namespace PriceFlex_Backend.Controllers
 
         }
 
-        [Authorize]
+        [Authorize(Roles = "StandardUser")]
         [HttpGet("test")]
         public ActionResult test()
         {

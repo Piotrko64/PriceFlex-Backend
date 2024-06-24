@@ -14,7 +14,7 @@ namespace PriceFlex_Backend.Models.validators.user
         public RegisterUserValidation(ScrapperDbContext dbContext)
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
-            RuleFor(x => x.Password).Matches(@"^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
+            RuleFor(x => x.Password).NotEmpty().Matches(@"^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$");
 
             RuleFor(x => x.Email).Custom((value, context) =>
             {

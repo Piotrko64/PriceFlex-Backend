@@ -12,6 +12,8 @@ using PriceFlex_Backend.Models.dtos.user;
 using PriceFlex_Backend.Models.validators.user;
 using FluentValidation.AspNetCore;
 using System;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,32 @@ builder.Services.AddControllers()
           });
 
 
+
+Console.WriteLine(builder.Configuration.GetValue<string>("Authentication:JwtIssuer"));
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = "Bearer";
+    option.DefaultScheme = "Bearer";
+    option.DefaultChallengeScheme = "Bearer";
+
+}).AddJwtBearer(cfg =>
+{
+
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = builder.Configuration.GetValue<string>("Authentication:JwtIssuer"),
+        ValidAudience = builder.Configuration.GetValue<string>("Authentication:JwtIssuer"),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Authentication:JwtKey")))
+    };
+
+
+
+});
+
+
 var app = builder.Build();
 
 
@@ -79,8 +107,10 @@ app.Services.UseScheduler(scheduler =>
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
+app.UseAuthentication();
+
+app.UseAuthorization();
 app.MapControllers();
 
 
